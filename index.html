@@ -7,276 +7,339 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #fffaf2;
-      color: #333;
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      color: #4a2c2a;
+      scroll-behavior: smooth;
     }
 
-    /* Welcome Page */
-    .welcome {
-      height: 100vh;
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      z-index: 1000;
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+    }
+    header .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #4a2c2a;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #e07a5f;
+    }
+
+    /* Burger menu */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background: #4a2c2a;
+      margin: 4px 0;
+      border-radius: 3px;
+    }
+
+    section {
+      padding: 100px 20px;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    /* Landing */
+    #landing {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #f9d29d, #f8b500);
-      text-align: center;
+      background: linear-gradient(to bottom, #ffe5b4, #fff5e6);
     }
-    .welcome img {
-      width: 180px;
+    #landing img {
+      width: 120px;
       margin-bottom: 20px;
     }
-    .welcome h1 {
-      font-family: 'Comic Sans MS', cursive;
-      font-size: 2.2rem;
-      color: #5c2c00;
-    }
-    .welcome p {
-      font-size: 1.1rem;
-      margin: 10px 0 30px;
-      color: #4d2c0a;
-    }
-    .welcome button {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 25px;
-      background: #f8b500;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    }
-    .welcome button:hover {
-      background: #e09e00;
-    }
-
-    /* Navbar */
-    nav {
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 40px;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    nav img {
-      height: 40px;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-    nav ul li a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-    }
-    nav ul li a:hover {
-      color: #544621;
-    }
-
-    /* Sections */
-    section {
-      padding: 60px 10%;
-      display: none;
-    }
-    section.active {
-      display: block;
-    }
-    section h2 {
-      text-align: center;
-      margin-bottom: 20px;
+    #landing h1 {
       font-size: 2rem;
-      color: #5c2c00;
+    }
+    #landing button {
+      background: #f6ad55;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border-radius: 25px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    #landing button:hover {
+      background: #dd6b20;
+      color: white;
+      transform: scale(1.05);
     }
 
-    /* Produk Grid */
-    .produk-grid {
+    /* Produk */
+    #produk h2 {
+      margin-bottom: 30px;
+    }
+    .produk-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
-    .produk-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      overflow: hidden;
+    .produk {
       background: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
     }
-    .produk-card:hover {
-      transform: translateY(-5px);
+    .produk.show {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .produk-card img {
+    .produk img {
       width: 100%;
-      height: 180px;
-      object-fit: cover;
+      border-radius: 10px;
     }
-    .produk-card .info {
-      padding: 15px;
-    }
-    .produk-card h3 {
-      margin: 0;
-      font-size: 1.2rem;
-      color: #5c2c00;
-    }
-    .produk-card p {
-      font-size: 0.9rem;
-      color: #555;
+    .produk h3 {
       margin: 10px 0;
     }
-    .produk-card .harga {
-      font-weight: bold;
-      color: #f8b500;
-      margin: 5px 0;
-    }
-    .produk-card button {
-      background: #f8b500;
+    .produk button {
+      background: #f6ad55;
       border: none;
-      color: #fff;
       padding: 8px 15px;
       border-radius: 20px;
       cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
     }
-    .produk-card button:hover {
-      background: #553d04;
+    .produk button:hover {
+      background: #dd6b20;
+      color: white;
+      transform: scale(1.05);
     }
 
     /* Keranjang */
-    #keranjang-list {
+    #keranjang ul {
       list-style: none;
       padding: 0;
     }
-    #keranjang-list li {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
+    #keranjang li {
+      margin: 5px 0;
+      background: #fff;
+      padding: 5px 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* Footer */
-    footer {
-      background: #755807;
-      text-align: center;
+    /* Pembayaran */
+    #pembayaran .metode {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .pay-card {
+      background: #fff;
       padding: 20px;
-      margin-top: 40px;
-      color: #fff;
+      border-radius: 15px;
+      width: 150px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Kontak */
+    #kontak .wa-list {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    #kontak a {
+      display: inline-block;
+      background: #25d366;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    #kontak a:hover {
+      background: #128c7e;
+    }
+
+    footer {
+      background: #4a2c2a;
+      color: white;
+      text-align: center;
+      padding: 15px;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      nav {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        display: none;
+      }
+      nav.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #landing h1 {
+        font-size: 1.5rem;
+      }
+      #landing img {
+        width: 90px;
+      }
+      #landing button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Welcome Page -->
-  <div class="welcome" id="welcome">
-    <img src="logo-transparan.png" alt="Logo Coffee">
+  <!-- Navbar -->
+  <header>
+    <div class="logo">
+      <img src="logo-cilacoffee.png" alt="CilaCoffee">
+      <span>CilaCoffee</span>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+    <nav id="nav-menu">
+      <a href="#landing">Home</a>
+      <a href="#produk">Produk</a>
+      <a href="#keranjang">Keranjang</a>
+      <a href="#pembayaran">Pembayaran</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+  </header>
+
+  <!-- Landing -->
+  <section id="landing">
+    <img src="logo-cilacoffee.png" alt="Logo">
     <h1>☕ Dalgona Coffee</h1>
     <p>Rasakan manisnya busa kopi yang lembut...</p>
-    <button onclick="masukToko()">Masuk ke Toko</button>
-  </div>
-
-  <!-- Navbar -->
-  <nav id="navbar">
-    <img src="logo-transparan.png" alt="Logo">
-    <ul>
-      <li><a href="#" onclick="tampilkan('produk')">Produk</a></li>
-      <li><a href="#" onclick="tampilkan('keranjang')">Keranjang</a></li>
-      <li><a href="#" onclick="tampilkan('tentang')">Tentang Kami</a></li>
-      <li><a href="#" onclick="tampilkan('kontak')">Kontak</a></li>
-    </ul>
-  </nav>
+    <button onclick="document.querySelector('#produk').scrollIntoView({behavior: 'smooth'})">
+      Masuk ke Toko
+    </button>
+  </section>
 
   <!-- Produk -->
-  <section id="produk" class="active">
-    <h2>Menu Kopi Kami</h2>
-    <div class="produk-grid">
-      <div class="produk-card">
-        <img src="https://source.unsplash.com/400x300/?coffee" alt="Dalgona">
-        <div class="info">
-          <h3>Dalgona Coffee</h3>
-          <p>Kopi susu dengan busa lembut khas dalgona.</p>
-          <div class="harga">Rp 25.000</div>
-          <button onclick="tambahKeranjang('Dalgona Coffee', 25000)">Tambah</button>
-        </div>
-      </div>
-      <div class="produk-card">
-        <img src="https://source.unsplash.com/400x300/?latte" alt="Latte">
-        <div class="info">
-          <h3>Café Latte</h3>
-          <p>Kopi espresso dengan susu creamy.</p>
-          <div class="harga">Rp 30.000</div>
-          <button onclick="tambahKeranjang('Café Latte', 30000)">Tambah</button>
-        </div>
-      </div>
-      <div class="produk-card">
-        <img src="https://source.unsplash.com/400x300/?mocha" alt="Mocha">
-        <div class="info">
-          <h3>Mocha</h3>
-          <p>Kombinasi kopi, susu, dan cokelat.</p>
-          <div class="harga">Rp 28.000</div>
-          <button onclick="tambahKeranjang('Mocha', 28000)">Tambah</button>
-        </div>
-      </div>
+  <section id="produk">
+    <h2>Produk Kami</h2>
+    <div class="produk-container">
+      <div class="produk"><img src="dalgona1.jpg"><h3>Dalgona Original</h3><button onclick="addToCart('Dalgona Original')">Tambah</button></div>
+      <div class="produk"><img src="dalgona2.jpg"><h3>Dalgona Oreo</h3><button onclick="addToCart('Dalgona Oreo')">Tambah</button></div>
+      <div class="produk"><img src="dalgona3.jpg"><h3>Dalgona Beng-Beng</h3><button onclick="addToCart('Dalgona Beng-Beng')">Tambah</button></div>
+      <div class="produk"><img src="dalgona4.jpg"><h3>Dalgona Matcha</h3><button onclick="addToCart('Dalgona Matcha')">Tambah</button></div>
+      <div class="produk"><img src="dalgona5.jpg"><h3>Dalgona Gula Aren</h3><button onclick="addToCart('Dalgona Gula Aren')">Tambah</button></div>
     </div>
   </section>
 
   <!-- Keranjang -->
   <section id="keranjang">
-    <h2>Keranjang Belanja</h2>
-    <ul id="keranjang-list"></ul>
-    <p><strong>Total: Rp <span id="total">0</span></strong></p>
+    <h2>Keranjang</h2>
+    <ul id="cart-list"></ul>
+  </section>
+
+  <!-- Pembayaran -->
+  <section id="pembayaran">
+    <h2>Metode Pembayaran</h2>
+    <div class="metode">
+      <div class="pay-card">💳 Transfer Bank</div>
+      <div class="pay-card">📱 Dana</div>
+      <div class="pay-card">💸 COD</div>
+    </div>
   </section>
 
   <!-- Tentang Kami -->
   <section id="tentang">
     <h2>Tentang Kami</h2>
-    <p>Dalgona Cila Coffee adalah tempat terbaik untuk menikmati kopi dengan cita rasa unik dan suasana nyaman.</p>
+    <p>CilaCoffee adalah coffee shop yang menghadirkan sensasi Dalgona dengan berbagai varian rasa.</p>
   </section>
 
   <!-- Kontak -->
   <section id="kontak">
-    <h2>Kontak</h2>
-    <p>📍 Jl. Dr Rajiman No. 24, Cilacap Tengah</p>
-    <p>📞 0812-3456-7890</p>
-    <p>📧 cilacoffee@email.com</p>
+    <h2>Kontak Kami</h2>
+    <div class="wa-list">
+      <a href="https://wa.me/6281234567890" target="_blank">WA 1</a>
+      <a href="https://wa.me/6282234567890" target="_blank">WA 2</a>
+      <a href="https://wa.me/6283234567890" target="_blank">WA 3</a>
+      <a href="https://wa.me/6284234567890" target="_blank">WA 4</a>
+      <a href="https://wa.me/6285234567890" target="_blank">WA 5</a>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 Dalgona Cila Coffee. All rights reserved.</p>
+    © 2025 Dalgona Cila Coffee. All rights reserved.
   </footer>
 
   <script>
-    let keranjang = [];
-    let total = 0;
-
-    function masukToko() {
-      document.getElementById('welcome').style.display = 'none';
-      document.getElementById('navbar').style.display = 'flex';
-      tampilkan('produk');
+    // Burger menu
+    function toggleMenu() {
+      document.getElementById("nav-menu").classList.toggle("active");
     }
 
-    function tampilkan(menu) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(menu).classList.add('active');
-    }
-
-    function tambahKeranjang(nama, harga) {
-      keranjang.push({ nama, harga });
-      total += harga;
-      updateKeranjang();
-    }
-
-    function updateKeranjang() {
-      let list = document.getElementById('keranjang-list');
-      list.innerHTML = "";
-      keranjang.forEach(item => {
-        let li = document.createElement('li');
-        li.textContent = item.nama + " - Rp " + item.harga;
-        list.appendChild(li);
+    // Animasi produk saat discroll
+    const produkItems = document.querySelectorAll('.produk');
+    const showOnScroll = () => {
+      produkItems.forEach(item => {
+        const rect = item.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 50) {
+          item.classList.add('show');
+        }
       });
-      document.getElementById('total').textContent = total;
+    };
+    window.addEventListener('scroll', showOnScroll);
+    showOnScroll();
+
+    // Keranjang
+    const cartList = document.getElementById('cart-list');
+    function addToCart(item) {
+      const li = document.createElement('li');
+      li.textContent = item;
+      cartList.appendChild(li);
     }
   </script>
 </body>
