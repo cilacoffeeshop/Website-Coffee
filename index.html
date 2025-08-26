@@ -55,6 +55,8 @@
       display: none;
       flex-direction: column;
       cursor: pointer;
+      z-index: 1100;
+      transition: all 0.4s ease;
     }
     .menu-toggle span {
       height: 3px;
@@ -62,6 +64,40 @@
       background: #4a2c2a;
       margin: 4px 0;
       border-radius: 3px;
+      transition: all 0.4s ease;
+    }
+    .menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    .menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Responsive nav */
+    @media (max-width: 768px) {
+      nav {
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        background: white;
+        flex-direction: column;
+        width: 200px;
+        padding: 20px;
+        transition: right 0.4s ease;
+        height: auto;
+        border-radius: 10px 0 0 10px;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+      }
+      nav.active {
+        right: 0;
+      }
+      .menu-toggle {
+        display: flex;
+      }
     }
 
     section {
@@ -118,6 +154,7 @@
       opacity: 0;
       transform: translateY(20px);
       transition: all 0.6s ease-out;
+      position: relative;
     }
     .produk.show {
       opacity: 1;
@@ -144,6 +181,25 @@
       transform: scale(1.05);
     }
 
+    /* Notifikasi */
+    .notif {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.5s, transform 0.5s;
+      transform: translateY(-20px);
+      z-index: 2000;
+    }
+    .notif.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* Keranjang */
     #keranjang ul {
       list-style: none;
@@ -168,16 +224,38 @@
       background: #fff;
       padding: 20px;
       border-radius: 15px;
-      width: 150px;
+      width: 160px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    .pay-card:hover {
+      transform: scale(1.05);
+      background: #ffe0b3;
+    }
+
+    .pay-detail {
+      margin-top: 20px;
+      display: none;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .bank-options select {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
 
     /* Kontak */
-    #kontak .wa-list {
+    #kontak .wa-list, #kontak .sosmed-list {
       display: flex;
       justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
+      margin-top: 15px;
     }
     #kontak a {
       display: inline-block;
@@ -191,6 +269,10 @@
     #kontak a:hover {
       background: #128c7e;
     }
+    #kontak .ig { background: #E1306C; }
+    #kontak .ig:hover { background: #c32aa3; }
+    #kontak .tiktok { background: #010101; }
+    #kontak .tiktok:hover { background: #333; }
 
     footer {
       background: #4a2c2a;
@@ -198,50 +280,16 @@
       text-align: center;
       padding: 15px;
     }
-
-    /* RESPONSIVE DESIGN */
-    @media (max-width: 768px) {
-      nav {
-        position: absolute;
-        top: 60px;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px;
-        display: none;
-      }
-      nav.active {
-        display: flex;
-      }
-      .menu-toggle {
-        display: flex;
-      }
-    }
-
-    @media (max-width: 480px) {
-      #landing h1 {
-        font-size: 1.5rem;
-      }
-      #landing img {
-        width: 90px;
-      }
-      #landing button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
   <header>
     <div class="logo">
-      <img src="logo-cilacoffee.png" alt="CilaCoffee">
+      <img src="Logo Fiks.png" alt="CilaCoffee">
       <span>CilaCoffee</span>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()">
+    <div class="menu-toggle" id="menu-toggle">
       <span></span><span></span><span></span>
     </div>
     <nav id="nav-menu">
@@ -254,9 +302,8 @@
     </nav>
   </header>
 
-  <!-- Landing -->
   <section id="landing">
-    <img src="logo-cilacoffee.png" alt="Logo">
+    <img src="logo-transparan.png" alt="Logo">
     <h1>☕ Dalgona Coffee</h1>
     <p>Rasakan manisnya busa kopi yang lembut...</p>
     <button onclick="document.querySelector('#produk').scrollIntoView({behavior: 'smooth'})">
@@ -264,7 +311,6 @@
     </button>
   </section>
 
-  <!-- Produk -->
   <section id="produk">
     <h2>Produk Kami</h2>
     <div class="produk-container">
@@ -276,29 +322,40 @@
     </div>
   </section>
 
-  <!-- Keranjang -->
   <section id="keranjang">
     <h2>Keranjang</h2>
     <ul id="cart-list"></ul>
   </section>
 
-  <!-- Pembayaran -->
   <section id="pembayaran">
     <h2>Metode Pembayaran</h2>
     <div class="metode">
-      <div class="pay-card">💳 Transfer Bank</div>
-      <div class="pay-card">📱 Dana</div>
-      <div class="pay-card">💸 COD</div>
+      <div class="pay-card" onclick="showPayment('bank')">💳 Transfer Bank</div>
+      <div class="pay-card" onclick="showPayment('dana')">📱 Dana</div>
+      <div class="pay-card" onclick="showPayment('ovo')">🛡️ OVO</div>
+      <div class="pay-card" onclick="showPayment('gopay')">🏦 GoPay</div>
+      <div class="pay-card" onclick="showPayment('cod')">💸 COD</div>
     </div>
+    <div id="pay-detail" class="pay-detail"></div>
   </section>
 
-  <!-- Tentang Kami -->
   <section id="tentang">
     <h2>Tentang Kami</h2>
-    <p>CilaCoffee adalah coffee shop yang menghadirkan sensasi Dalgona dengan berbagai varian rasa.</p>
+    <p>
+      CilaCoffee hadir untuk membawa pengalaman menikmati kopi yang lebih hangat dan berbeda. 
+      Kami percaya bahwa secangkir kopi bukan hanya sekadar minuman, tetapi sebuah momen untuk 
+      berbagi cerita, melepaskan lelah, dan menemukan inspirasi. Dengan spesialisasi pada kreasi 
+      Dalgona Coffee, kami menghadirkan berbagai varian rasa mulai dari klasik hingga inovasi unik 
+      yang dibuat dengan bahan berkualitas pilihan.  
+      <br><br>
+      Sejak berdiri, CilaCoffee selalu berkomitmen memberikan pelayanan terbaik, rasa autentik, 
+      dan kualitas premium pada setiap cangkir. Visi kami sederhana: menghadirkan kopi nikmat yang 
+      bisa dinikmati semua kalangan dengan harga terjangkau, namun tetap menjaga kualitas.  
+      <br><br>
+      Mari bergabung bersama kami dan rasakan sensasi berbeda dari setiap tegukan Dalgona Coffee!
+    </p>
   </section>
 
-  <!-- Kontak -->
   <section id="kontak">
     <h2>Kontak Kami</h2>
     <div class="wa-list">
@@ -308,19 +365,26 @@
       <a href="https://wa.me/6284234567890" target="_blank">WA 4</a>
       <a href="https://wa.me/6285234567890" target="_blank">WA 5</a>
     </div>
+    <div class="sosmed-list">
+      <a href="https://instagram.com/cilacoffee" target="_blank" class="ig">Instagram</a>
+      <a href="https://tiktok.com/@cilacoffee" target="_blank" class="tiktok">TikTok</a>
+    </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     © 2025 Dalgona Cila Coffee. All rights reserved.
   </footer>
 
-  <script>
-    // Burger menu
-    function toggleMenu() {
-      document.getElementById("nav-menu").classList.toggle("active");
-    }
+  <div id="notif" class="notif">Produk ditambahkan!</div>
 
+  <script>
+    // Perbaikan untuk event listener hamburger menu
+    document.getElementById("menu-toggle").addEventListener('click', function() {
+        const navMenu = document.getElementById("nav-menu");
+        navMenu.classList.toggle("active");
+        this.classList.toggle("active");
+    });
+    
     // Animasi produk saat discroll
     const produkItems = document.querySelectorAll('.produk');
     const showOnScroll = () => {
@@ -334,12 +398,46 @@
     window.addEventListener('scroll', showOnScroll);
     showOnScroll();
 
-    // Keranjang
+    // Keranjang & Notif
     const cartList = document.getElementById('cart-list');
+    const notif = document.getElementById('notif');
     function addToCart(item) {
       const li = document.createElement('li');
       li.textContent = item;
       cartList.appendChild(li);
+
+      // Tampilkan notif
+      notif.textContent = item + " ditambahkan ke keranjang!";
+      notif.classList.add('show');
+      setTimeout(() => notif.classList.remove('show'), 2000);
+    }
+
+    // Pembayaran interaktif
+    function showPayment(type) {
+      const detail = document.getElementById('pay-detail');
+      let content = "";
+      if (type === "bank") {
+        content = `
+          <h3>Transfer Bank</h3>
+          <label>Pilih Bank:</label>
+          <select>
+            <option>BCA - 1234567890</option>
+            <option>BRI - 0987654321</option>
+            <option>BNI - 111222333</option>
+            <option>Mandiri - 444555666</option>
+          </select>
+        `;
+      } else if (type === "dana") {
+        content = "<h3>Dana</h3><p>Nomor: 0812-xxxx-xxxx</p>";
+      } else if (type === "ovo") {
+        content = "<h3>OVO</h3><p>Nomor: 0857-xxxx-xxxx</p>";
+      } else if (type === "gopay") {
+        content = "<h3>GoPay</h3><p>Nomor: 0881-xxxx-xxxx</p>";
+      } else if (type === "cod") {
+        content = "<h3>COD</h3><p>Bayar langsung di tempat.</p>";
+      }
+      detail.innerHTML = content;
+      detail.style.display = "block";
     }
   </script>
 </body>
