@@ -56,25 +56,32 @@
       flex-direction: column;
       cursor: pointer;
       z-index: 1100;
-      transition: all 0.4s ease;
+      padding: 10px; /* Padding dikurangi menjadi 10px */
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .menu-toggle:hover {
+      background: rgba(0,0,0,0.05); /* Efek visual saat di-hover */
     }
     .menu-toggle span {
       height: 3px;
-      width: 25px;
+      width: 25px; /* Lebar garis sedikit dikurangi */
       background: #4a2c2a;
-      margin: 4px 0;
+      margin: 4px 0; /* Jarak antar garis sedikit dikurangi */
       border-radius: 3px;
-      transition: all 0.4s ease;
+      transition: all 0.5s cubic-bezier(0.68,-0.55,0.27,1.55);
     }
     .menu-toggle.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+      transform: rotate(45deg) translate(5px, 5px); /* Posisi disesuaikan */
+      background: #e07a5f;
     }
     .menu-toggle.active span:nth-child(2) {
       opacity: 0;
       transform: translateX(-20px);
     }
     .menu-toggle.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
+      transform: rotate(-45deg) translate(5px, -5px); /* Posisi disesuaikan */
+      background: #e07a5f;
     }
 
     /* Responsive nav */
@@ -167,6 +174,10 @@
     .produk h3 {
       margin: 10px 0;
     }
+    .produk p {
+      font-weight: bold;
+      color: #e07a5f;
+    }
     .produk button {
       background: #f6ad55;
       border: none;
@@ -201,18 +212,34 @@
     }
 
     /* Keranjang */
+    #keranjang {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
     #keranjang ul {
       list-style: none;
       padding: 0;
     }
     #keranjang li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin: 5px 0;
       background: #fff;
       padding: 5px 10px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
+    #cart-total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #4a2c2a;
+    }
+    
     /* Pembayaran */
     #pembayaran .metode {
       display: flex;
@@ -314,17 +341,43 @@
   <section id="produk">
     <h2>Produk Kami</h2>
     <div class="produk-container">
-      <div class="produk"><img src="dalgona1.jpg"><h3>Dalgona Original</h3><button onclick="addToCart('Dalgona Original')">Tambah</button></div>
-      <div class="produk"><img src="dalgona2.jpg"><h3>Dalgona Oreo</h3><button onclick="addToCart('Dalgona Oreo')">Tambah</button></div>
-      <div class="produk"><img src="dalgona3.jpg"><h3>Dalgona Beng-Beng</h3><button onclick="addToCart('Dalgona Beng-Beng')">Tambah</button></div>
-      <div class="produk"><img src="dalgona4.jpg"><h3>Dalgona Matcha</h3><button onclick="addToCart('Dalgona Matcha')">Tambah</button></div>
-      <div class="produk"><img src="dalgona5.jpg"><h3>Dalgona Gula Aren</h3><button onclick="addToCart('Dalgona Gula Aren')">Tambah</button></div>
+      <div class="produk">
+        <img src="original.jpg">
+        <h3>Dalgona Original</h3>
+        <p>Rp 10.000</p>
+        <button onclick="addToCart('Dalgona Original', 10000)">Tambah</button>
+      </div>
+      <div class="produk">
+        <img src="oreo.jpg">
+        <h3>Dalgona Oreo</h3>
+        <p>Rp 12.000</p>
+        <button onclick="addToCart('Dalgona Oreo', 12000)">Tambah</button>
+      </div>
+      <div class="produk">
+        <img src="bengbeng.jpg">
+        <h3>Dalgona Beng-Beng</h3>
+        <p>Rp 12.000</p>
+        <button onclick="addToCart('Dalgona Beng-Beng', 12000)">Tambah</button>
+      </div>
+      <div class="produk">
+        <img src="matcha.jpg">
+        <h3>Dalgona Matcha</h3>
+        <p>Rp 12.000</p>
+        <button onclick="addToCart('Dalgona Matcha', 12000)">Tambah</button>
+      </div>
+      <div class="produk">
+        <img src="gula aren.jpg">
+        <h3>Dalgona Gula Aren</h3>
+        <p>Rp 12.000</p>
+        <button onclick="addToCart('Dalgona Gula Aren', 12000)">Tambah</button>
+      </div>
     </div>
   </section>
 
   <section id="keranjang">
     <h2>Keranjang</h2>
     <ul id="cart-list"></ul>
+    <div id="cart-total">Total: Rp 0</div>
   </section>
 
   <section id="pembayaran">
@@ -378,13 +431,28 @@
   <div id="notif" class="notif">Produk ditambahkan!</div>
 
   <script>
-    // Perbaikan untuk event listener hamburger menu
-    document.getElementById("menu-toggle").addEventListener('click', function() {
-        const navMenu = document.getElementById("nav-menu");
-        navMenu.classList.toggle("active");
-        this.classList.toggle("active");
+    const menuToggle = document.getElementById("menu-toggle");
+    const navMenu = document.getElementById("nav-menu");
+
+    // Fungsi untuk membuka/menutup menu
+    function toggleMenu() {
+      navMenu.classList.toggle("active");
+      menuToggle.classList.toggle("active");
+    }
+
+    // Event listener untuk tombol menu
+    menuToggle.addEventListener('click', toggleMenu);
+
+    // Fungsi untuk menutup menu jika klik di luar
+    document.addEventListener('click', function(event) {
+      if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+        if (navMenu.classList.contains('active')) {
+          navMenu.classList.remove('active');
+          menuToggle.classList.remove('active');
+        }
+      }
     });
-    
+
     // Animasi produk saat discroll
     const produkItems = document.querySelectorAll('.produk');
     const showOnScroll = () => {
@@ -401,15 +469,29 @@
     // Keranjang & Notif
     const cartList = document.getElementById('cart-list');
     const notif = document.getElementById('notif');
-    function addToCart(item) {
-      const li = document.createElement('li');
-      li.textContent = item;
-      cartList.appendChild(li);
+    const cartTotal = document.getElementById('cart-total');
+    let cart = [];
+
+    function addToCart(item, price) {
+      cart.push({ name: item, price: price });
+      updateCart();
 
       // Tampilkan notif
       notif.textContent = item + " ditambahkan ke keranjang!";
       notif.classList.add('show');
       setTimeout(() => notif.classList.remove('show'), 2000);
+    }
+    
+    function updateCart() {
+      cartList.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - Rp ${item.price.toLocaleString('id-ID')}`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      cartTotal.textContent = `Total: Rp ${total.toLocaleString('id-ID')}`;
     }
 
     // Pembayaran interaktif
@@ -419,6 +501,7 @@
       if (type === "bank") {
         content = `
           <h3>Transfer Bank</h3>
+          <p>Total yang harus dibayar: <b>${cartTotal.textContent}</b></p>
           <label>Pilih Bank:</label>
           <select>
             <option>BCA - 1234567890</option>
@@ -428,13 +511,13 @@
           </select>
         `;
       } else if (type === "dana") {
-        content = "<h3>Dana</h3><p>Nomor: 0812-xxxx-xxxx</p>";
+        content = "<h3>Dana</h3><p>Nomor: 0812-xxxx-xxxx</p><p>Total yang harus dibayar: <b>" + cartTotal.textContent + "</b></p>";
       } else if (type === "ovo") {
-        content = "<h3>OVO</h3><p>Nomor: 0857-xxxx-xxxx</p>";
+        content = "<h3>OVO</h3><p>Nomor: 0857-xxxx-xxxx</p><p>Total yang harus dibayar: <b>" + cartTotal.textContent + "</b></p>";
       } else if (type === "gopay") {
-        content = "<h3>GoPay</h3><p>Nomor: 0881-xxxx-xxxx</p>";
+        content = "<h3>GoPay</h3><p>Nomor: 0881-xxxx-xxxx</p><p>Total yang harus dibayar: <b>" + cartTotal.textContent + "</b></p>";
       } else if (type === "cod") {
-        content = "<h3>COD</h3><p>Bayar langsung di tempat.</p>";
+        content = "<h3>COD</h3><p>Bayar langsung di tempat.</p><p>Total yang harus dibayar: <b>" + cartTotal.textContent + "</b></p>";
       }
       detail.innerHTML = content;
       detail.style.display = "block";
